@@ -1,22 +1,24 @@
-import React from "react";
-import { StaticContainer } from "../../tools/globalStyles";
+import React, { useEffect } from "react";
+import { MainContainer, Title } from "../../tools/globalStyles";
 import Research from "../../components/Research/Research";
-import Navbar from "../../components/Navbar/Navbar";
-import Announcement from "../../components/Announcement/Announcement";
-import Footer from "../../components/Footer/Footer";
-import Newsletter from "../../components/Newsletter/Newsletter";
+
+import { useDispatch } from "react-redux";
+import { changePage } from "../../redux/currentPageRedux";
 
 const ResearchPage = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const updatePage = () => {
+      dispatch(changePage("research"));
+    };
+    updatePage();
+  });
+
   return (
-    <div>
-      <Announcement />
-      <Navbar />
-      <StaticContainer>
-        <Research />
-      </StaticContainer>
-      <Newsletter />
-      <Footer />
-    </div>
+    <MainContainer flexDirection={"column"}>
+      <Title>Research</Title>
+      <Research />
+    </MainContainer>
   );
 };
 

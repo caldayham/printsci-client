@@ -25,10 +25,6 @@ import {
   Title,
 } from "../../tools/globalStyles";
 
-import Announcement from "../../components/Announcement/Announcement";
-import Navbar from "../../components/Navbar/Navbar";
-import Footer from "../../components/Footer/Footer";
-import Newsletter from "../../components/Newsletter/Newsletter";
 import ProductAmount from "../../components/SubComponents/ProductAmount/ProductAmount";
 
 import { useLocation } from "react-router-dom";
@@ -37,8 +33,10 @@ import ProductOptions from "../../components/SubComponents/ProductOptions/Produc
 import Rating from "../../components/SubComponents/Rating/Rating";
 
 import numberWithCommas from "../../tools/stylingTools";
-import { addProduct } from "../../redux/cartRedux";
+
 import { useDispatch } from "react-redux";
+import { addProduct } from "../../redux/cartRedux";
+import { changePage } from "../../redux/currentPageRedux";
 
 const ProductPage = () => {
   const location = useLocation();
@@ -68,12 +66,13 @@ const ProductPage = () => {
 
         setProduct(res.data);
         setRendering(false);
+        dispatch(changePage("product"));
       } catch (err) {
         console.log(err);
       }
     };
     getProduct();
-  }, [id]);
+  }, [id, dispatch]);
 
   useEffect(() => {
     const updatePackagePrice = () => {
@@ -90,13 +89,11 @@ const ProductPage = () => {
           currentPackagePriceMultiplier
       );
 
-      setPackagePrice(
-        (product.basePrice * currentPackagePriceMultiplier).toFixed(2)
-      );
+      setPackagePrice(product.basePrice * currentPackagePriceMultiplier);
     };
 
     const updateTotalPrice = () => {
-      setTotalPrice((packagePrice * quantity).toFixed(2));
+      setTotalPrice(packagePrice * quantity);
     };
     !rendering && updateTotalPrice();
     !rendering && updatePackagePrice();
@@ -130,8 +127,6 @@ const ProductPage = () => {
 
   return (
     <div>
-      <Announcement />
-      <Navbar />
       {rendering ? (
         <div>"is rendering"</div>
       ) : (
@@ -279,8 +274,6 @@ const ProductPage = () => {
         </MainContainer>
       )}
       <button id="newsletter" />
-      <Newsletter />
-      <Footer />
     </div>
   );
 };

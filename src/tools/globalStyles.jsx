@@ -127,23 +127,24 @@ const Subtitle = styled.h2`
   padding-top: ${(props) => props.paddingTop};
   padding-bottom: ${(props) => props.paddingBottom};
 `;
-
 const Paragraph = styled.p`
   font-size: 18px;
   font-weight: 200;
   padding-top: ${(props) => props.paddingTop};
   padding-bottom: ${(props) => props.paddingBottom};
+  width: ${(props) => (props.width ? props.width : null)};
+  min-width: ${(props) => (props.width ? "300px" : null)};
 `;
 
-const HorizontalLine = styled.hr`
-  height: 1px;
-  border: none;
-  background-color: black;
-  margin: 40px 0px;
+const PageSection = styled.div`
+  padding-bottom: ${(props) =>
+    props.paddingBottom ? props.paddingBottom : "40px"};
+  padding-top: ${(props) => (props.paddingTop ? props.paddingTop : "40px")};
+  border-bottom: ${(props) =>
+    props.borderBottom == null ? "1px solid rgb(200, 200, 200)" : "none"};
 `;
 
 export {
-  HorizontalLine,
   StaticContainer,
   SocialIconContainer,
   Title,
@@ -160,4 +161,5 @@ export {
   SocialIcon,
   MainContainer,
   CustomLink,
+  PageSection,
 };

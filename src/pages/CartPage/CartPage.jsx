@@ -1,9 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-import Announcement from "../../components/Announcement/Announcement";
-import Footer from "../../components/Footer/Footer";
-import Navbar from "../../components/Navbar/Navbar";
 import ProductAmount from "../../components/SubComponents/ProductAmount/ProductAmount";
 
 import {
@@ -14,10 +11,7 @@ import {
   ProductDetail,
   Image,
   Details,
-  ProductMaterial,
-  ProductSize,
   PriceDetail,
-  MaterialSwatch,
   ProductPrice,
   SummaryItem,
   SummaryItemText,
@@ -39,14 +33,50 @@ import {
   CustomLink,
 } from "../../tools/globalStyles";
 
+import numberWithCommas from "../../tools/stylingTools";
+
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import SaveAltOutlinedIcon from "@mui/icons-material/SaveAltOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 
-import Newsletter from "../../components/Newsletter/Newsletter";
+import StripeCheckout from "react-stripe-checkout";
+import { userRequest } from "../../tools/requestMethods";
+import { useNavigate } from "react-router-dom";
+
+const KEY = process.env.REACT_APP_STRIPE_PRINTSCI_TEST_PUB;
 
 const CartPage = () => {
   const cart = useSelector((state) => state.cart);
+  console.log("next is the cart");
+  console.log(cart);
+  const history = useNavigate();
+
+  const [stripeToken, setStripeToken] = useState(null);
+  const onToken = (token) => {
+    setStripeToken(token);
+  };
+
+  useEffect(() => {
+    const makeRequest = async () => {
+      try {
+        const res = await userRequest.post("/checkout/payment", {
+          tokenId: stripeToken.id,
+          amount: cart.total * 100,
+        });
+        console.log(res);
+        history("/checkout/success", { state: { data: res.data } });
+      } catch (err) {
+        console.log("A FUCKING ERROR WAS ENCOUNTERED! LOL");
+        return err;
+      }
+    };
+    stripeToken && cart.total >= 1 && makeRequest();
+  }, [stripeToken, cart.total, history]);
+
+  const updateQuantity = () => {
+    console.log("new quantity");
+    return 2;
+  };
 
   function calculatePrice(product) {
     console.log(product);
@@ -71,100 +101,125 @@ const CartPage = () => {
   }
 
   return (
-    <div>
-      <Announcement />
-      <Navbar />
-      <MainContainer>
-        {/*here is the left side content for the cart content*/}
-        <CartContent>
-          <TopTexts>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <Title>Your Cart</Title>
-              <CustomLink to={`/catalog/all`}>
-                <ShopNowButton style={{ marginTop: "10px" }}>
-                  Continue Shopping
-                </ShopNowButton>
-              </CustomLink>
-            </div>
-            <div style={{ display: "flex" }}>
-              <TopText>Cart ({cart.quantity})</TopText>
-              <TopText>Saved (0)</TopText>
-            </div>
-          </TopTexts>
-          <CartItems>
-            {cart.products.map((product, i) => (
-              <Product key={i}>
-                <EditOptions>
-                  <Icon>
-                    <CustomLink to={`/product/${product._id}`}>
-                      <EditOutlinedIcon />
-                    </CustomLink>
-                  </Icon>
-                  <Icon>
-                    <CustomLink to={`/mycart`}>
-                      <SaveAltOutlinedIcon />
-                    </CustomLink>
-                  </Icon>
-                  <Icon>
-                    <CustomLink to={`/home`}>
-                      <DeleteOutlinedIcon />
-                    </CustomLink>
-                  </Icon>
-                </EditOptions>
-                <ProductDetail>
-                  {console.log(product)}
-                  <Image src={product.imgs[0]} />
-                  <Details>
-                    <div>
-                      <Subtitle>{product.title}</Subtitle>
-                      <Paragraph>
-                        <b>Part ID:</b> {product.partId}
+    <MainContainer>
+      {/*here is the left side content for the cart content*/}
+      <CartContent>
+        <TopTexts>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <Title>Your Cart</Title>
+            <CustomLink to={`/catalog/all`}>
+              <ShopNowButton style={{ marginTop: "10px" }}>
+                Continue Shopping
+              </ShopNowButton>
+            </CustomLink>
+          </div>
+          <div style={{ display: "flex" }}>
+            <TopText>Cart ({cart.quantity})</TopText>
+            <TopText>Saved (0)</TopText>
+          </div>
+        </TopTexts>
+        <CartItems>
+          {cart.products.map((product, i) => (
+            <Product key={i}>
+              <EditOptions>
+                <Icon>
+                  <CustomLink to={`/product/${product._id}`}>
+                    <EditOutlinedIcon />
+                  </CustomLink>
+                </Icon>
+                <Icon>
+                  <CustomLink to={`/mycart`}>
+                    <SaveAltOutlinedIcon />
+                  </CustomLink>
+                </Icon>
+                <Icon>
+                  <CustomLink to={`/home`}>
+                    <DeleteOutlinedIcon />
+                  </CustomLink>
+                </Icon>
+              </EditOptions>
+              <Image src={product.imgs[0]} />
+              <ProductDetail>
+                <Details>
+                  <div>
+                    <Subtitle>{product.title}</Subtitle>
+                    <Paragraph>
+                      <b>Part ID:</b> {product.partId}
+                    </Paragraph>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexWrap: "wrap",
+                      columnGap: "10px",
+                      rowGap: "4px",
+                      paddingTop: "20px",
+                    }}
+                  >
+                    {product.options.map((option, i) => (
+                      <Paragraph key={i}>
+                        <span style={{ fontSize: "14px" }}>
+                          {option.optionTitle + ": "}
+                        </span>
+                        <b style={{ fontSize: "16px" }}>
+                          {
+                            option.optionSelections[option.selectedOption]
+                              .selection
+                          }
+                        </b>
                       </Paragraph>
-                    </div>
-                    <ProductMaterial>
-                      <b>Material:</b> PLA Plastic
-                      <MaterialSwatch color="#cf7500" />
-                    </ProductMaterial>
-                    <ProductSize>
-                      <b>Size:</b> Medium
-                    </ProductSize>
-                  </Details>
-                </ProductDetail>
-                <PriceDetail>
-                  <ProductPrice>${calculatePrice(product)}</ProductPrice>
-                  <ProductAmount />
-                </PriceDetail>
-              </Product>
-            ))}
-          </CartItems>
-        </CartContent>
-        {/*here is the right side content for the checkout*/}
-        <CartCheckout>
-          <ProductCheckout>
-            <SummaryTitle>Order Summary</SummaryTitle>
-            <SummaryItem>
-              <SummaryItemText>Subtotal</SummaryItemText>
-              <SummaryItemPrice>$410.24</SummaryItemPrice>
-            </SummaryItem>
-            <SummaryItem>
-              <SummaryItemText>Estimated Shipping</SummaryItemText>
-              <SummaryItemPrice>$18.00</SummaryItemPrice>
-            </SummaryItem>
-            <SummaryItem>
-              <SummaryItemText>Shipping Discount</SummaryItemText>
-              <SummaryItemPrice>$-18.00</SummaryItemPrice>
-            </SummaryItem>
-            <SummaryItem type="total">
-              <SummaryItemText>Total</SummaryItemText>
-              <SummaryItemPrice>${cart.total.toFixed(2)}</SummaryItemPrice>
-            </SummaryItem>
-            <CheckoutButton>Checkout</CheckoutButton>
-          </ProductCheckout>
-        </CartCheckout>
-      </MainContainer>
-      <Newsletter />
-      <Footer />
-    </div>
+                    ))}
+                  </div>
+                </Details>
+              </ProductDetail>
+              <PriceDetail>
+                <ProductPrice>
+                  ${numberWithCommas(calculatePrice(product))}
+                </ProductPrice>
+                <ProductAmount
+                  quantity={product.quantity}
+                  change={updateQuantity}
+                />
+              </PriceDetail>
+            </Product>
+          ))}
+        </CartItems>
+      </CartContent>
+      {/*here is the right side content for the checkout*/}
+      <CartCheckout>
+        <ProductCheckout>
+          <SummaryTitle>Order Summary</SummaryTitle>
+          <SummaryItem>
+            <SummaryItemText>Subtotal</SummaryItemText>
+            <SummaryItemPrice>${numberWithCommas(cart.total)}</SummaryItemPrice>
+          </SummaryItem>
+          <SummaryItem>
+            <SummaryItemText>Estimated Shipping</SummaryItemText>
+            <SummaryItemPrice>$18.00</SummaryItemPrice>
+          </SummaryItem>
+          <SummaryItem>
+            <SummaryItemText>Shipping Discount</SummaryItemText>
+            <SummaryItemPrice>$-18.00</SummaryItemPrice>
+          </SummaryItem>
+          <SummaryItem type="total">
+            <SummaryItemText>Total</SummaryItemText>
+            <SummaryItemPrice>${numberWithCommas(cart.total)}</SummaryItemPrice>
+          </SummaryItem>
+          <StripeCheckout
+            name="Print Scientific"
+            image="/images/favicon.png"
+            billingAddress
+            shippingAddress
+            description={`Your total is $${cart.total}`}
+            amount={cart.total * 100}
+            token={onToken}
+            stripeKey={KEY}
+          >
+            <CheckoutButton style={{ width: "100%" }}>Checkout</CheckoutButton>
+          </StripeCheckout>
+        </ProductCheckout>
+      </CartCheckout>
+    </MainContainer>
   );
 };
 

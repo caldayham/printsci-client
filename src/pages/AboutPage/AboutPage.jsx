@@ -1,31 +1,44 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
-  StaticContainer,
   Subtitle,
   Paragraph,
-  HorizontalLine,
+  MainContainer,
+  Title,
+  PageSection,
 } from "../../tools/globalStyles";
-import Navbar from "../../components/Navbar/Navbar";
-import Announcement from "../../components/Announcement/Announcement";
-import Footer from "../../components/Footer/Footer";
-import Newsletter from "../../components/Newsletter/Newsletter";
 import Members from "../../components/Members/Members";
+import { useDispatch } from "react-redux";
+import { changePage } from "../../redux/currentPageRedux";
 
 const AboutPage = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const updatePage = () => {
+      dispatch(changePage("about"));
+    };
+    updatePage();
+  });
+
   return (
-    <div>
-      <Announcement />
-      <Navbar />
-      <StaticContainer>
+    <MainContainer flexDirection={"column"}>
+      <Title>About Us</Title>
+      <img src="/images/parts.png" alt="banners" />
+      <PageSection>
         <Subtitle>What we do</Subtitle>
         <br />
-        <Paragraph>
-          Print Scientific is a manufacturing and tool version-control company.
-          We build high-efficiency systems for bringing tools into the physical.
-          Sometimes your product or an equally sufficient solution exists, we
-          find it and manipulate it to fit your requirements.
+        <Paragraph width={"50vw"}>
+          Print Scientific is a manufacturing and part version-control company.
+          We build high-efficiency systems that are the genesis for many crucial
+          parts in modern laboratories. Sometimes your product or an equally
+          sufficient solution exists, we find it and manipulate it to fit your
+          requirements.
         </Paragraph>
-        <HorizontalLine />
+      </PageSection>
+      <PageSection>
+        <Subtitle>Meet the team!</Subtitle>
+        <Members />
+      </PageSection>
+      <PageSection>
         <Subtitle>Where we're going</Subtitle>
         <br />
         <Paragraph>
@@ -41,13 +54,11 @@ const AboutPage = () => {
           research equipment. Our team has expertise in CAD, 3D printing, CNC
           milling turning, and polymer casting.
         </Paragraph>
-        <HorizontalLine />
-        <Subtitle>Meet the team!</Subtitle>
-        <Members />
-        <br />
-        <br />
+      </PageSection>
+      <PageSection>
         <Subtitle>Contact us</Subtitle>
-        <HorizontalLine />
+      </PageSection>
+      <PageSection borderBottom={false}>
         <Subtitle>Other helpful things</Subtitle>
         <br />
         <Paragraph>
@@ -62,10 +73,8 @@ const AboutPage = () => {
         <Paragraph>
           Browse the <u>Catalog</u>
         </Paragraph>
-      </StaticContainer>
-      <Newsletter />
-      <Footer />
-    </div>
+      </PageSection>
+    </MainContainer>
   );
 };
 

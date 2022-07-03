@@ -22,10 +22,17 @@ import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import { Link } from "react-router-dom";
 import ClickLogo from "../SubComponents/Logo/ClickLogo";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { changePage } from "../../redux/currentPageRedux";
+import { changeOverlay } from "../../redux/overlayRedux.js";
+import { CustomLink } from "../../tools/globalStyles.jsx";
+
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 
 const Navbar = () => {
   const quantity = useSelector((state) => state.cart.quantity);
+
+  const dispatch = useDispatch();
 
   return (
     <Container>
@@ -46,51 +53,77 @@ const Navbar = () => {
               to="/catalog"
               style={{ textDecoration: "none", color: "white" }}
             >
-              <LocalLink>Catalog</LocalLink>
+              <LocalLink
+                onClick={() => dispatch(changePage("catalog"))}
+                thisPage={"catalog"}
+              >
+                Catalog
+              </LocalLink>
             </Link>
             <Link
               to="/custom"
               style={{ textDecoration: "none", color: "white" }}
             >
-              <LocalLink>Custom</LocalLink>
+              <LocalLink
+                onClick={() => dispatch(changePage("custom"))}
+                thisPage={"custom"}
+              >
+                Custom
+              </LocalLink>
             </Link>
             <Link
               to="/research"
               style={{ textDecoration: "none", color: "white" }}
             >
-              <LocalLink>Research</LocalLink>
+              <LocalLink
+                onClick={() => dispatch(changePage("research"))}
+                thisPage={"research"}
+              >
+                Research
+              </LocalLink>
             </Link>
             <Link
               to="/about"
               style={{ textDecoration: "none", color: "white" }}
             >
-              <LocalLink>About Us</LocalLink>
+              <LocalLink
+                onClick={() => dispatch(changePage("about"))}
+                thisPage={"about"}
+              >
+                About Us
+              </LocalLink>
             </Link>
           </NavLinkBar>
         </Center>
         <Right>
-          <MenuItem>
-            <Link
-              to="/login"
-              style={{ textDecoration: "none", color: "white" }}
-            >
-              <LocalMinorLink>
+          {!useSelector((state) => state.user.currentUser) && (
+            <MenuItem>
+              <LocalMinorLink onClick={() => dispatch(changeOverlay(true))}>
                 Login or <br />
                 Register
               </LocalMinorLink>
-            </Link>
-          </MenuItem>
+            </MenuItem>
+          )}
+          {useSelector((state) => state.user.currentUser) && (
+            <CustomLink to="/myaccount">
+              <BadgeWrapper>
+                <Badge>
+                  <ManageAccountsIcon style={{ fontSize: "inherit" }} />
+                </Badge>
+              </BadgeWrapper>
+            </CustomLink>
+          )}
           <MenuItem>
-            <Link
+            <CustomLink
               to="/mycart"
-              style={{ textDecoration: "none", color: "white" }}
+              onClick={() => dispatch(changePage("cart"))}
             >
               <BadgeWrapper>
                 <Badge badgeContent={quantity} color="primary">
                   <ShoppingBagOutlinedIcon style={{ fontSize: "inherit" }} />
                 </Badge>
               </BadgeWrapper>
-            </Link>
+            </CustomLink>
           </MenuItem>
         </Right>
       </Wrapper>

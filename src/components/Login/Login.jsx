@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Form,
   Input,
@@ -6,24 +7,45 @@ import {
   ActionWrapper,
   Link,
   Wrapper,
-  BackButton,
+  Error,
 } from "./styles";
-import { useNavigate } from "react-router-dom";
+
+import { login } from "../../redux/apiCalls";
+import { changeOverlay } from "../../redux/overlayRedux";
 
 const Login = () => {
-  let history = useNavigate();
+  const [username, setUsername] = useState("");
+  // const [email, setEmail] = useState(""); // got to search with regex if the input is an email then set email or username based on that, for now it will just be username
+  const [password, setPassword] = useState("");
+
+  const dispatch = useDispatch();
+  const { isFetching, error } = useSelector((state) => state.user);
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    login(dispatch, { username, password });
+    dispatch(changeOverlay(false));
+  };
 
   return (
     <Wrapper>
       <Form>
-        <Input placeholder="organization" />
-        <Input placeholder="email" />
-        <Input placeholder="password" />
+        <Input
+          placeholder="username or email"
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <Input
+          placeholder="password"
+          type="password"
+          onChange={(e) => setPassword(e.target.value)}
+        />
       </Form>
       <ActionWrapper>
         <Link>Forgot some credentials?</Link>
-        <Button>Login</Button>
-        <BackButton onClick={() => history(-1)}>go back</BackButton>
+        <Button onClick={handleClick} disabled={isFetching}>
+          Login
+        </Button>
+        {error && <Error>Someone made a fucky-wucky...</Error>}
       </ActionWrapper>
     </Wrapper>
   );

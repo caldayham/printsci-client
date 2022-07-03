@@ -15,7 +15,7 @@ export const sliderItems = [
   },
   {
     id: 3,
-    img: "/images/TabConnect_img1.PNG",
+    img: "/images/tabconnect1.PNG",
     title: ["You know the part,", "we know the path."],
     desc: "Custom parts are SHIPPED FREE on orders over $100 this summer! ",
     bg: "fbf0f4",
@@ -28,7 +28,7 @@ export const categories = [
     img: "/images/SLA_SteriFlow_assembly_img2.PNG",
     title: "All",
     cat: "all",
-    desc: "Browse our entire collection of products.",
+    desc: "Browse our entire product collection.",
   },
   {
     id: 2,
@@ -42,21 +42,21 @@ export const categories = [
     img: "/images/TFlow_prone_img4.PNG",
     title: "Anesthesia",
     cat: "anesthesia",
-    desc: "Nose cones, masks, tubing, and other supplies.",
+    desc: "Nose cones, masks, and other supplies.",
   },
   {
     id: 4,
-    img: "/images/MicroTube.png",
+    img: "/images/microtube1.png",
     title: "Consumables",
     cat: "consumables",
-    desc: "Transfer pipettes, underpads, centerfuge tubes and much more.",
+    desc: "Restock the essentials with quality.",
   },
 ];
 
 export const members = [
   {
     id: 1,
-    img: "/images/members/CalDayHam1.png",
+    img: "/images/memberImgs/CalDayHam1.png",
     title: "Cal Day Ham",
     position: "COO",
     loves: "efficiency & family",
@@ -133,7 +133,7 @@ export const members = [
   },
   {
     id: 2,
-    img: "/images/members/LouisJaeckle1.jpg",
+    img: "/images/memberImgs/LouisJaeckle1.jpg",
     title: "Louis Jaeckle",
     position: "CTO",
     loves: "python try-catch blocks",
