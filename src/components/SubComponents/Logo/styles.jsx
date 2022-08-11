@@ -20,8 +20,8 @@ const LogoImage = styled.img`
 const LogoTitle = styled.h1`
   font-weight: bold;
   font-size: 30px;
-  transition: all 0.1s ease;
-  line-height: 90%;
+  transition: all 0.2s ease;
+  line-height: 80%;
 `;
 
 const Logo = styled.div`

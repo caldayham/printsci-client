@@ -1,44 +1,37 @@
 import styled from "styled-components";
 
-const AbstractBox = styled.div`
-  height: 200px;
-  overflow: scroll;
-  overflow-x: hidden;
-  font-weight: 100;
-  padding: 10px;
-  margin-top: 20px;
-  color: rgb(100, 100, 100);
-
-  transition: all 0.1s ease;
-  background-color: white;
-`;
-
 const LayeredImgWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  flex: 1;
+  height: 200px;
   align-items: center;
-  width: 100%;
-  padding-top: 100%;
   position: relative;
 `;
 
 const ImageLayer = styled.img`
   position: absolute;
-  top: 0px;
-  width: 100%;
-
+  height: 100%;
+  z-index: 1;
   transition: all 0.1s ease;
 `;
 
-const RightWrapper = styled.div`
-  flex: 1;
+const ImageLayerFocus = styled.img`
+  position: absolute;
+  height: 100%;
+  z-index: 2;
+
+  transition: all 0.2s ease;
+`;
+
+const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
-  padding-left: 40px;
-  border-left: 1px solid rgb(200, 200, 200);
+  flex: 1;
+  height: 200px;
+  align-items: ${(props) => (props.align ? props.align : "left")};
 `;
 
 const HoverCardWrapper = styled.div`
@@ -59,19 +52,18 @@ const HoverCardWrapper = styled.div`
   }
 
   &:hover ${ImageLayer} {
-    width: 110%;
+    height: 110%;
   }
 
-  &:hover ${AbstractBox} {
-    background-color: rgb(231, 241, 255);
-    height: 200px;
+  &:hover ${ImageLayerFocus} {
+    height: 140%;
   }
 `;
 
 export {
-  HoverCardWrapper,
-  ImageLayer,
+  Wrapper,
   LayeredImgWrapper,
-  AbstractBox,
-  RightWrapper,
+  ImageLayer,
+  HoverCardWrapper,
+  ImageLayerFocus,
 };

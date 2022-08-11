@@ -9,12 +9,14 @@ const ClickLogo = () => {
 
   return (
     <Container onClick={() => dispatch(changePage("home"))}>
-      <Link to={`/home/#`} style={{ textDecoration: "none" }}>
+      <Link to={`/home/#`} style={{ textDecoration: "none", color: "white" }}>
         <Logo>
           <LogoImageBox>
-            <LogoImage src="/favicon.ico" alt="image" />
+            <LogoImage src="/favicon.ico" alt="logo" />
           </LogoImageBox>
-          <LogoTitle>Print Scientific</LogoTitle>
+          <LogoTitle>
+            Print <br /> Scientific
+          </LogoTitle>
         </Logo>
       </Link>
     </Container>

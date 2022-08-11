@@ -74,6 +74,8 @@ const FilterContainer = styled.div`
   display: flex;
   justify-content: space-between;
   height: auto;
+  flex-wrap: wrap;
+  gap: 20px;
 `;
 
 const Filter = styled.div`
@@ -144,6 +146,25 @@ const PageSection = styled.div`
     props.borderBottom == null ? "1px solid rgb(200, 200, 200)" : "none"};
 `;
 
+const HoverCardWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: left;
+  justify-content: space-between;
+  margin-top: 2%;
+  padding: 20px;
+  color: black;
+  border: 1px solid rgb(200, 200, 200);
+  background: rgb(231, 241, 255);
+  margin-bottom: 0%;
+  flex: 1;
+
+  transition: all 0.1s ease;
+  &:hover {
+    background: rgb(193, 220, 255);
+  }
+`;
+
 export {
   StaticContainer,
   SocialIconContainer,
@@ -162,4 +183,5 @@ export {
   MainContainer,
   CustomLink,
   PageSection,
+  HoverCardWrapper,
 };
